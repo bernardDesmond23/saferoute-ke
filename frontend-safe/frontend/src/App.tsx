@@ -1,25 +1,46 @@
 import React from 'react';
-import logo from './logo.svg';
+import { SafeRouteProvider } from './context/SafeRouteContext';
+import { Header } from './components/Header/Header';
+import { MapView } from './components/Map/MapView';
+import { RoutePlanner } from './components/Routing/RoutePlanner';
+import { RouteComparison } from './components/Routing/RouteComparison';
+import { BedrockExplanation } from './components/Routing/BedrockExplanation';
+import { WeatherStatusCard } from './components/Weather/WeatherStatusCard';
+import { IncidentReportModal } from './components/Incidents/IncidentReportModal';
+import { IncidentListDrawer } from './components/Incidents/IncidentListDrawer';
 import './App.css';
+
+const MainLayout: React.FC = () => {
+  return (
+    <div className="app-container">
+      <Header />
+      <div className="app-body">
+        {/* Left Sidebar Control Panel */}
+        <aside className="app-sidebar">
+          <RoutePlanner />
+          <RouteComparison />
+          <BedrockExplanation />
+          <WeatherStatusCard />
+        </aside>
+
+        {/* Center / Full Map Area */}
+        <main className="app-main-map">
+          <MapView />
+        </main>
+      </div>
+
+      {/* Floating Overlays / Modals */}
+      <IncidentReportModal />
+      <IncidentListDrawer />
+    </div>
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <SafeRouteProvider>
+      <MainLayout />
+    </SafeRouteProvider>
   );
 }
 

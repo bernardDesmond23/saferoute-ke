@@ -1,0 +1,124 @@
+.map-view-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #0b1220;
+}
+
+.map-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.map-overlay-top-right {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 10;
+}
+
+.map-controls-panel,
+.map-legend {
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 0.75rem;
+  min-width: 170px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.controls-title,
+.legend-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+.control-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #0f172a;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.4rem 0.55rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.control-toggle-btn.active {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.15);
+  color: #fff;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  color: #e2e8f0;
+  margin-bottom: 0.35rem;
+}
+
+.legend-line {
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.legend-line.safest {
+  background: #10b981;
+}
+
+.legend-line.shortest {
+  background: repeating-linear-gradient(90deg, #ef4444 0 6px, transparent 6px 10px);
+}
+
+.legend-swatch,
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-swatch.flood {
+  background: rgba(245, 158, 11, 0.7);
+}
+
+.legend-dot.origin {
+  background: #10b981;
+}
+
+.legend-dot.dest {
+  background: #3b82f6;
+}
+
+.legend-dot.hazard {
+  background: #dc2626;
+}
+
+.hub-marker {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.45);
+}
+
+.hub-marker.origin {
+  background: #10b981;
+}
+
+.hub-marker.dest {
+  background: #3b82f6;
+}

@@ -1,0 +1,147 @@
+.weather-status-card {
+  background-color: #1e293b;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  padding: 1.15rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.weather-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.weather-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.weather-icon {
+  color: #38bdf8;
+}
+
+.weather-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.sync-provider {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  display: block;
+}
+
+.live-sync-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  color: #34d399;
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 2px 7px;
+  border-radius: 9999px;
+}
+
+.pulse-radio {
+  animation: pulse-ring 2s infinite;
+}
+
+.basin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+}
+
+.basin-chip {
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.55rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.basin-chip.alert-active {
+  border-color: rgba(245, 158, 11, 0.4);
+  background-color: rgba(245, 158, 11, 0.04);
+}
+
+.basin-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+.basin-name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.alert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background-color: rgba(245, 158, 11, 0.2);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.basin-metrics {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.precip-stat {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.droplet-icon {
+  color: #38bdf8;
+}
+
+.stage-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.stage-tag.overflow {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.stage-tag.danger {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: #fb923c;
+}
+
+.stage-tag.alert {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.stage-tag.normal {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
