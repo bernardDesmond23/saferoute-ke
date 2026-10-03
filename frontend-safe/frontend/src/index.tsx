@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import maplibregl from 'maplibre-gl';
+
+// In MapLibre v6, you must explicitly point to the self-hosted worker file
+maplibregl.setWorkerUrl('./maplibre-gl-worker.mjs');
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
