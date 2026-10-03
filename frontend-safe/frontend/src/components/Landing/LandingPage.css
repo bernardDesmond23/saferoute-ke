@@ -1,0 +1,140 @@
+.landing {
+  min-height: 100vh;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 0 24px 60px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.landing-hero {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 90px 0 60px;
+  text-align: center;
+}
+
+.landing-badge {
+  display: inline-block;
+  background: #1e293b;
+  color: #94a3b8;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.landing-hero h1 {
+  font-size: 52px;
+  line-height: 1.1;
+  font-weight: 700;
+  margin: 0 0 20px;
+  color: #f8fafc;
+}
+
+.landing-tagline {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #94a3b8;
+  margin: 0 0 40px;
+}
+
+.landing-cta {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 16px 36px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.landing-cta:hover {
+  background: #15803d;
+}
+
+.landing-section {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 0;
+  border-top: 1px solid #1e293b;
+}
+
+.landing-section h2 {
+  font-size: 24px;
+  margin: 0 0 16px;
+  color: #f8fafc;
+}
+
+.landing-section p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #cbd5e1;
+}
+
+.landing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.landing-card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+}
+
+.landing-card h3 {
+  font-size: 16px;
+  margin: 0 0 12px;
+  color: #f8fafc;
+}
+
+.landing-card ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.landing-card li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin-bottom: 6px;
+}
+
+.landing-card code {
+  background: #0f172a;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #4ade80;
+}
+
+.landing-stack {
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #94a3b8;
+}
+
+.landing-footer {
+  max-width: 780px;
+  margin: 40px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid #1e293b;
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.landing-footer a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.landing-footer a:hover {
+  text-decoration: underline;
+}

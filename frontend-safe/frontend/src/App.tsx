@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeRouteProvider } from './context/SafeRouteContext';
 import { Header } from './components/Header/Header';
 import { MapView } from './components/Map/MapView';
@@ -8,6 +8,7 @@ import { BedrockExplanation } from './components/Routing/BedrockExplanation';
 import { WeatherStatusCard } from './components/Weather/WeatherStatusCard';
 import { IncidentReportModal } from './components/Incidents/IncidentReportModal';
 import { IncidentListDrawer } from './components/Incidents/IncidentListDrawer';
+import { LandingPage } from './components/Landing/LandingPage';
 import './App.css';
 
 const MainLayout: React.FC = () => {
@@ -37,6 +38,12 @@ const MainLayout: React.FC = () => {
 };
 
 function App() {
+  const [showDashboard, setShowDashboard] = useState(false);
+
+  if (!showDashboard) {
+    return <LandingPage onLaunch={() => setShowDashboard(true)} />;
+  }
+
   return (
     <SafeRouteProvider>
       <MainLayout />
