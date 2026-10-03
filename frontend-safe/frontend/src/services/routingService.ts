@@ -1,5 +1,4 @@
 import { RouteQuery, RouteResult, RouteSegment } from '../types';
-import { apiClient } from './api';
 import { APP_CONFIG } from '../constants/config';
 import { FLOOD_PRONE_CHOKEPOINTS } from '../constants/kenyaLocations';
 import { calculateDistanceKm, generateInterpolatedPath } from '../utils/geoUtils';
@@ -9,11 +8,31 @@ export interface DualRouteResponse {
   shortest: RouteResult;
 }
 
+// Live API Gateway endpoint from `cdk deploy` output
+const LIVE_API_URL =
+  'https://d0j7inj3el.execute-api.us-east-1.amazonaws.com/route';
+
+// Backend nodes our routing engine knows about
+const KNOWN_TOWNS = [
+  'Nairobi', 'Thika', 'Garissa', 'Kisumu', 'Mombasa', 'Nakuru',
+  'Eldoret', 'Isiolo', 'Garsen', 'Malindi', 'Dadaab', 'Wajir',
+  'Marsabit', 'Lodwar', 'Kitale', 'Nyeri', 'Embu', 'Muranga',
+];
+
 const VEHICLE_SPEED_KMH: Record<RouteQuery['vehicleType'], number> = {
   heavy_aid_truck: 42,
   truck_4x4: 55,
   light_van: 60,
 };
+
+/** Extract a backend node name from a hub label like "Mombasa Port Relief Depot" */
+function extractTownName(hubLabel: string): string | null {
+  const upper = hubLabel.toUpperCase();
+  for (const town of KNOWN_TOWNS) {
+    if (upper.includes(town.toUpperCase())) return town;
+  }
+  return null;
+}
 
 function nearestChokepoint(start: [number, number], end: [number, number]) {
   const mid: [number, number] = [(start[0] + end[0]) / 2, (start[1] + end[1]) / 2];
@@ -36,9 +55,7 @@ function buildSegments(
   coordinates: [number, number][],
   riskProfile: 'safe' | 'exposed'
 ): RouteSegment[] {
-  if (coordinates.length < 2) {
-    return [];
-  }
+  if (coordinates.length < 2) return [];
 
   const mid = Math.max(1, Math.floor(coordinates.length / 2));
   const chunks: [number, number][][] = [coordinates.slice(0, mid + 1), coordinates.slice(mid)];
@@ -59,12 +76,7 @@ function buildSegments(
       id: `${namePrefix}-seg-${index + 1}`,
       name: isExposed ? `${namePrefix} — flood choke point` : `${namePrefix} corridor ${index + 1}`,
       distanceKm: Number(distanceKm.toFixed(1)),
-      risk: {
-        staticRisk,
-        dynamicRisk,
-        triggerRisk,
-        combinedFactor,
-      },
+      risk: { staticRisk, dynamicRisk, triggerRisk, combinedFactor },
       isSubmerged: isExposed,
       isImpassable: isExposed,
       hazardDescription: isExposed
@@ -124,19 +136,78 @@ function simulateDijkstra(query: RouteQuery): DualRouteResponse {
   };
 }
 
-export const routingService = {
-  async computeRoutes(query: RouteQuery): Promise<DualRouteResponse> {
-    if (!APP_CONFIG.api.mockFallbackEnabled) {
-      try {
-        return await apiClient<DualRouteResponse>('/routes/compute', {
-          method: 'POST',
-          body: query,
-        });
-      } catch (err) {
-        console.warn('Routing API unavailable, using simulated Dijkstra network', err);
-      }
+/** Call the live AWS API Gateway for the safest route */
+async function fetchLiveSafestRoute(
+  query: RouteQuery
+): Promise<{ coords: [number, number][]; distanceKm: number; riskScore: number } | null> {
+  const originTown = extractTownName(query.origin.name);
+  const destTown = extractTownName(query.destination.name);
+
+  if (!originTown || !destTown || originTown === destTown) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(LIVE_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ origin: originTown, destination: destTown }),
+    });
+
+    if (!response.ok) {
+      console.warn('Live API returned error', response.status);
+      return null;
     }
 
-    return simulateDijkstra(query);
+    const data = await response.json();
+    const coords = (data.geojson?.geometry?.coordinates ?? []) as [number, number][];
+    if (coords.length < 2) return null;
+
+    return {
+      coords,
+      distanceKm: data.total_distance_km ?? 0,
+      riskScore: data.risk_score ?? 1.0,
+    };
+  } catch (err) {
+    console.warn('Live API unreachable, using simulation', err);
+    return null;
+  }
+}
+
+export const routingService = {
+  async computeRoutes(query: RouteQuery): Promise<DualRouteResponse> {
+    // Always compute the simulated shortest route (the "what Google Maps would do" comparison)
+    const simulated = simulateDijkstra(query);
+
+    // Try to fetch a real safe route from the deployed AWS backend
+    const live = await fetchLiveSafestRoute(query);
+    if (live) {
+      const speed = VEHICLE_SPEED_KMH[query.vehicleType];
+      const estimatedDurationMinutes = Math.round((live.distanceKm / speed) * 60);
+
+      const liveSafest: RouteResult = {
+        id: `safest-live-${query.origin.name}-${query.destination.name}`
+          .toLowerCase()
+          .replace(/\s+/g, '-'),
+        type: 'safest',
+        title: 'Flood-safe Dijkstra route (live API)',
+        totalDistanceKm: Number(live.distanceKm.toFixed(1)),
+        estimatedDurationMinutes,
+        aggregateRiskScore: Math.round(live.riskScore * 100),
+        riskLevel: 'low',
+        submergedBridgesEncountered: 0,
+        floodZonesAvoided: FLOOD_PRONE_CHOKEPOINTS.length,
+        segments: buildSegments('Live API high-ground', live.coords, 'safe'),
+        coordinates: live.coords,
+      };
+
+      return {
+        safest: liveSafest,
+        shortest: simulated.shortest,
+      };
+    }
+
+    // Fallback: pure simulation
+    return simulated;
   },
 };
