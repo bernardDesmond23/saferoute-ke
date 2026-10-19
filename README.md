@@ -48,6 +48,16 @@ Follow this flow to see the core capability in action.
     - **Flood Basins:** Highlights historically flood-prone river basins.
 
 ---
+## Disclaimer
+
+**SafeRoute Kenya is a prototype built for the AWS Zero to Shipped Hackathon. It is not intended for operational use in live disaster response.**
+
+- **Simulated data.** The road network, risk factors, and hazard reports used in this demo are hardcoded or simulated for demonstration purposes. They do not reflect real-time conditions on Kenyan roads.
+- **Not a substitute for official guidance.** In a real emergency, always follow instructions from the Kenya Red Cross Society, the National Disaster Management Authority (NDMA), or local authorities.
+- **No warranty.** The routing output is provided as-is, without any guarantee of accuracy, completeness, or safety. Do not use this application to make life-or-death decisions.
+- **Privacy.** This demo does not collect personal information. Volunteer reports submitted through the app are stored only in a demo DynamoDB table and are not shared with any third party.
+
+The purpose of this project is to demonstrate a proof-of-concept for flood-aware humanitarian logistics, and to invite collaboration on making it production-ready in partnership with the Kenya Red Cross and the Water Resources Authority.
 
 ## 🛠️ Architecture
 
@@ -87,3 +97,4 @@ flowchart TB
     Lambda -->|Rainfall| OpenMeteo
     Lambda -->|GeoJSON| APIGW
     APIGW --> AMP
+
